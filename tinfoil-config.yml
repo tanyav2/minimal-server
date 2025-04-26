@@ -1,0 +1,18 @@
+cvm-version: 0.0.26
+ovmf-version: 0.0.2
+cpus: 8
+memory: 40960
+
+shim:
+  domains:
+    - minimal.model.tinfoil.sh
+  listen-port: 443
+  upstream-port: 8080
+  paths:
+    - /hello
+  origins:
+    - https://tinfoil.sh
+
+containers:
+  - name: "minimal-server"
+    image: "ghcr.io/tinfoilsh/minimal-server:latest"

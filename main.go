@@ -10,7 +10,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/", handler)
+	http.HandleFunc("/hello", handler)
 	fmt.Println("Server starting on :8080")
 	http.ListenAndServe(":8080", nil)
 }
