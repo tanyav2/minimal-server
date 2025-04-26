@@ -1,12 +1,17 @@
+# .github/workflows/build.yml
 name: Build and Attest
 
 on:
-  push:
-    tags:
-      - 'v*'
+  workflow_run:
+    workflows: ["Build and Publish Docker Image"]
+    types: [ completed ]
 
 jobs:
   release:
+    # only run attest if the docker-publish run succeeded
+    if: ${{ github.event.workflow_run.conclusion == 'success' &&
+            startsWith(github.event.workflow_run.head_ref, 'v') 
+        }}
     runs-on: ubuntu-latest
     permissions:
       contents: write
