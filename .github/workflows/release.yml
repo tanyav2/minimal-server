@@ -57,7 +57,6 @@ jobs:
   attest:
     needs: build-and-push
     runs-on: ubuntu-latest
-    # only on tag pushes
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:
       contents:      write
@@ -85,6 +84,11 @@ jobs:
 
       - name: Upload attestation to Sigstore
         uses: actions/attest@v1
+        with:
+          subject-digest: ${{ steps.tinfoil-hash.outputs.sha }}
+          push-to-registry: false
+          show-summary: true
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Prepare release notes
         id: notes
@@ -94,7 +98,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name }}           # e.g. "v1.2.3"
+          tag_name: ${{ github.ref_name }}
           name:     Release ${{ github.ref_name }}
           body:     ${{ steps.notes.outputs.body }}
         env:
